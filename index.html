@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
     * {
@@ -88,22 +88,15 @@
       animation: fadeInUp 1.4s ease-out forwards;
     }
     
-    .btn-group {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    
     .action-btn {
       background: rgba(255, 255, 255, 0.07);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #f1f5f9;
-      padding: 0.65rem 1.4rem;
+      padding: 0.75rem 1.8rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
       letter-spacing: 0.5px;
       cursor: pointer;
@@ -111,7 +104,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
     
     .action-btn:hover {
@@ -123,72 +116,6 @@
     
     .action-btn:active {
       transform: translateY(0);
-    }
-    
-    /* Custom Note Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(9, 10, 16, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      z-index: 100;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      padding: 1.5rem;
-    }
-    
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    .card-modal {
-      background: linear-gradient(145deg, rgba(30, 32, 44, 0.95), rgba(15, 17, 26, 0.98));
-      border: 1px solid rgba(255, 183, 3, 0.3);
-      padding: 2.2rem;
-      border-radius: 24px;
-      max-width: 440px;
-      width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 183, 3, 0.15);
-      text-align: center;
-      transform: scale(0.9);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .modal-overlay.active .card-modal {
-      transform: scale(1);
-    }
-    
-    .card-modal h3 {
-      font-family: 'Cinzel', serif;
-      color: #ffe17d;
-      margin-bottom: 1rem;
-      font-size: 1.4rem;
-    }
-    
-    .note-textarea {
-      width: 100%;
-      height: 110px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
-      padding: 0.9rem;
-      color: #f8fafc;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.9rem;
-      resize: none;
-      outline: none;
-      margin-bottom: 1.2rem;
-      transition: border-color 0.3s;
-    }
-    
-    .note-textarea:focus {
-      border-color: #ffb703;
     }
     
     /* Startup Dialog Overlay */
@@ -215,7 +142,6 @@
       width: 100%;
       box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255, 183, 3, 0.2);
       text-align: center;
-      position: relative;
     }
 
     .startup-card h2 {
@@ -232,12 +158,15 @@
       margin-bottom: 2rem;
     }
 
+    /* Side-by-Side Buttons Container */
     .startup-btns {
       display: flex;
       justify-content: center;
-      gap: 1.2rem;
+      align-items: center;
+      gap: 1.5rem;
       position: relative;
-      min-height: 52px;
+      width: 100%;
+      height: 60px;
     }
 
     .btn-yes {
@@ -251,6 +180,7 @@
       cursor: pointer;
       box-shadow: 0 6px 20px rgba(251, 133, 0, 0.4);
       transition: all 0.3s;
+      z-index: 2;
     }
 
     .btn-yes:hover {
@@ -266,9 +196,9 @@
       border-radius: 9999px;
       font-size: 0.95rem;
       cursor: pointer;
-      position: absolute;
-      transition: all 0.15s ease-out;
+      transition: transform 0.15s ease-out;
       white-space: nowrap;
+      z-index: 1;
     }
     
     @keyframes fadeInDown {
@@ -301,77 +231,20 @@
 
   <div class="ui-container">
     <div class="header">
-      <h1 class="main-title" id="displayTitle">Flowers for You 🌻</h1>
+      <h1 class="main-title">Flowers for you, locci :) 🌻</h1>
     </div>
     
     <div class="footer">
-      <div class="btn-group">
-        <button class="action-btn" id="rebloomBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-          Rebloom Sunflower
-        </button>
-        <button class="action-btn" id="soundToggleBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          Sound ON
-        </button>
-      </div>
-      <button class="action-btn" id="openNoteBtn" style="background: rgba(255,183,3,0.15); border-color: rgba(255,183,3,0.4);">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        Personalize Note
+      <button class="action-btn" id="rebloomBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        Rebloom Sunflower
       </button>
-    </div>
-  </div>
-
-  <!-- Note Customization Modal -->
-  <div class="modal-overlay" id="noteModal">
-    <div class="card-modal">
-      <h3>Personalize Message</h3>
-      <textarea class="note-textarea" id="noteInput" placeholder="Type your title here..."></textarea>
-      <div style="display: flex; gap: 0.6rem; justify-content: center;">
-        <button class="action-btn" id="saveNoteBtn" style="background: #ffb703; color: #090a10; font-weight: 600;">Save Title</button>
-        <button class="action-btn" id="closeNoteBtn">Cancel</button>
-      </div>
     </div>
   </div>
 
   <script>
     const canvas = document.getElementById('sunflowerCanvas');
     const ctx = canvas.getContext('2d');
-
-    // Web Audio Sound Effects Synthesizer
-    let audioCtx = null;
-    let soundEnabled = true;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function playNoteSound(freq, duration = 0.2, type = 'sine') {
-      if (!soundEnabled || !audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    }
-
-    function playBloomChime() {
-      if (!soundEnabled) return;
-      initAudio();
-      const notes = [261.63, 329.63, 392.00, 523.25, 659.25];
-      notes.forEach((freq, index) => {
-        setTimeout(() => playNoteSound(freq, 0.4, 'triangle'), index * 120);
-      });
-    }
 
     // Canvas Resize Handler
     let width, height;
@@ -389,10 +262,10 @@
 
     // Seed/Petal Golden Ratio Calculations
     const GOLDEN_ANGLE = 137.50776405003785 * (Math.PI / 180);
-    const SEED_COUNT = 650;
-    const PETAL_COUNT = 42;
+    const SEED_COUNT = 520;
+    const PETAL_COUNT = 38;
 
-    // Ambient Floating Particles
+    // Ambient Floating Dust Particles
     const ambientParticles = Array.from({ length: 65 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -405,8 +278,6 @@
     // Sparkle Explosions Array
     let sparks = [];
     function spawnSparks(x, y) {
-      initAudio();
-      playNoteSound(440 + Math.random() * 300, 0.15, 'sine');
       for (let i = 0; i < 22; i++) {
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 4.5 + 1.2;
@@ -423,19 +294,19 @@
 
     // Tap & Click Event Listeners for Sparks
     window.addEventListener('pointerdown', (e) => {
-      if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'TEXTAREA') {
+      if (e.target.tagName !== 'BUTTON') {
         spawnSparks(e.clientX, e.clientY);
       }
     });
 
-    // Sunflower Renderer Function
+    // Exact Sunflower Scale matching Screenshot
     function getSingleSunflower() {
       const isMobile = width < 600;
       return {
         x: width / 2,
         y: height + 40,
-        targetY: height * 0.68,
-        scale: isMobile ? 1.45 : 1.85
+        targetY: height * 0.64,
+        scale: isMobile ? 1.25 : 1.55
       };
     }
 
@@ -469,17 +340,17 @@
       // Stem Curve
       ctx.beginPath();
       ctx.moveTo(flower.x, startY);
-      const controlX = flower.x + Math.sin(growth * Math.PI) * 25;
+      const controlX = flower.x + Math.sin(growth * Math.PI) * 18;
       const controlY = startY - currentHeight * 0.5;
       ctx.quadraticCurveTo(controlX, controlY, flower.x, endY);
       ctx.strokeStyle = '#2d5a27';
-      ctx.lineWidth = 14 * flower.scale;
+      ctx.lineWidth = 12 * flower.scale;
       ctx.lineCap = 'round';
       ctx.stroke();
 
       // Stem Inner Highlight
       ctx.strokeStyle = '#437a3c';
-      ctx.lineWidth = 5 * flower.scale;
+      ctx.lineWidth = 4 * flower.scale;
       ctx.stroke();
 
       // Leaves Growth
@@ -489,20 +360,20 @@
         
         // Left Leaf
         ctx.save();
-        ctx.translate(flower.x - 4, startY - currentHeight * 0.45);
-        ctx.rotate(-0.6);
+        ctx.translate(flower.x - 3, startY - currentHeight * 0.45);
+        ctx.rotate(-0.55);
         ctx.beginPath();
-        ctx.ellipse(0, 0, 45 * leafScale, 18 * leafScale, 0.4, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, 40 * leafScale, 16 * leafScale, 0.4, 0, Math.PI * 2);
         ctx.fillStyle = '#2d5a27';
         ctx.fill();
         ctx.restore();
 
         // Right Leaf
         ctx.save();
-        ctx.translate(flower.x + 4, startY - currentHeight * 0.6);
-        ctx.rotate(0.5);
+        ctx.translate(flower.x + 3, startY - currentHeight * 0.6);
+        ctx.rotate(0.48);
         ctx.beginPath();
-        ctx.ellipse(0, 0, 50 * leafScale, 20 * leafScale, -0.4, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, 44 * leafScale, 18 * leafScale, -0.4, 0, Math.PI * 2);
         ctx.fillStyle = '#34662d';
         ctx.fill();
         ctx.restore();
@@ -514,28 +385,28 @@
     function drawPetals(headX, headY, bloomProgress, scale) {
       if (bloomProgress <= 0) return;
 
-      const petalLength = 95 * scale * bloomProgress;
-      const petalWidth = 26 * scale * bloomProgress;
+      const petalLength = 88 * scale * bloomProgress;
+      const petalWidth = 24 * scale * bloomProgress;
       const time = Date.now() * 0.0015;
 
-      // Outer Glow
-      const glowGrad = ctx.createRadialGradient(headX, headY, 10, headX, headY, petalLength * 1.3);
+      // Soft Outer Sunflower Glow
+      const glowGrad = ctx.createRadialGradient(headX, headY, 10, headX, headY, petalLength * 1.25);
       glowGrad.addColorStop(0, 'rgba(255, 183, 3, 0.35)');
       glowGrad.addColorStop(1, 'rgba(255, 183, 3, 0)');
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
-      ctx.arc(headX, headY, petalLength * 1.3, 0, Math.PI * 2);
+      ctx.arc(headX, headY, petalLength * 1.25, 0, Math.PI * 2);
       ctx.fill();
 
-      // Double Layer Petal Ring
+      // Double Layer Petal Ring matching Screenshot
       for (let layer = 0; layer < 2; layer++) {
         const layerScale = layer === 0 ? 1 : 0.82;
-        const count = layer === 0 ? PETAL_COUNT : PETAL_COUNT - 6;
+        const count = layer === 0 ? PETAL_COUNT : PETAL_COUNT - 4;
         const offsetAngle = layer * (Math.PI / PETAL_COUNT);
 
         for (let i = 0; i < count; i++) {
           const angle = (i * (Math.PI * 2 / count)) + offsetAngle;
-          const sway = Math.sin(time + i) * 0.03;
+          const sway = Math.sin(time + i) * 0.025;
 
           ctx.save();
           ctx.translate(headX, headY);
@@ -543,13 +414,13 @@
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
-          ctx.quadraticCurveTo(-petalWidth * 0.55 * layerScale, petalLength * 0.5 * layerScale, 0, petalLength * layerScale);
-          ctx.quadraticCurveTo(petalWidth * 0.55 * layerScale, petalLength * 0.5 * layerScale, 0, 0);
+          ctx.quadraticCurveTo(-petalWidth * 0.5 * layerScale, petalLength * 0.5 * layerScale, 0, petalLength * layerScale);
+          ctx.quadraticCurveTo(petalWidth * 0.5 * layerScale, petalLength * 0.5 * layerScale, 0, 0);
 
           const grad = ctx.createLinearGradient(0, 0, 0, petalLength * layerScale);
           if (layer === 0) {
             grad.addColorStop(0, '#e65c00');
-            grad.addColorStop(0.3, '#ffb703');
+            grad.addColorStop(0.35, '#ffb703');
             grad.addColorStop(0.85, '#ffd166');
             grad.addColorStop(1, '#fff3b0');
           } else {
@@ -566,10 +437,10 @@
     }
 
     function drawCenterDisk(headX, headY, bloomProgress, scale) {
-      const diskRadius = 48 * scale * Math.min(1, bloomProgress * 1.2);
+      const diskRadius = 45 * scale * Math.min(1, bloomProgress * 1.2);
       if (diskRadius <= 0) return;
 
-      // Rich Brown Base Disk
+      // Dark Mahogany Core Base
       const baseGrad = ctx.createRadialGradient(headX, headY, 0, headX, headY, diskRadius);
       baseGrad.addColorStop(0, '#1a0a03');
       baseGrad.addColorStop(0.75, '#3d1e0b');
@@ -579,7 +450,7 @@
       ctx.arc(headX, headY, diskRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Fibonacci Spiral Seed Head
+      // Golden Spiral Seed Distribution
       const visibleSeeds = Math.floor(SEED_COUNT * bloomProgress);
       for (let i = 0; i < visibleSeeds; i++) {
         const r = Math.sqrt(i / SEED_COUNT) * diskRadius * 0.95;
@@ -587,7 +458,7 @@
 
         const x = headX + r * Math.cos(theta);
         const y = headY + r * Math.sin(theta);
-        const seedRadius = (1.4 + (r / diskRadius) * 1.5) * scale;
+        const seedRadius = (1.3 + (r / diskRadius) * 1.4) * scale;
 
         ctx.beginPath();
         ctx.arc(x, y, seedRadius, 0, Math.PI * 2);
@@ -609,7 +480,7 @@
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
-        s.vy += 0.08; // gravity
+        s.vy += 0.08;
         s.alpha -= 0.02;
 
         if (s.alpha <= 0) {
@@ -657,7 +528,6 @@
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
     const startupOverlay = document.getElementById('startupOverlay');
-    const btnContainer = document.getElementById('btnContainer');
 
     const noTexts = [
       "No",
@@ -672,11 +542,10 @@
     let noClickCount = 0;
 
     function moveNoBtn() {
-      const containerRect = btnContainer.getBoundingClientRect();
       const cardRect = startupOverlay.querySelector('.startup-card').getBoundingClientRect();
       
-      const maxX = (cardRect.width / 2) - 60;
-      const maxY = 120;
+      const maxX = (cardRect.width / 2) - 50;
+      const maxY = 70;
 
       const randomX = (Math.random() * maxX * 2) - maxX;
       const randomY = (Math.random() * maxY * 2) - maxY;
@@ -685,7 +554,6 @@
       
       noClickCount++;
       noBtn.textContent = noTexts[noClickCount % noTexts.length];
-      playNoteSound(300 + Math.random() * 200, 0.1, 'square');
     }
 
     noBtn.addEventListener('mouseenter', moveNoBtn);
@@ -694,44 +562,12 @@
     yesBtn.addEventListener('click', () => {
       startupOverlay.style.opacity = '0';
       setTimeout(() => startupOverlay.style.display = 'none', 600);
-      playBloomChime();
       bloomStartTime = null;
     });
 
     // Rebloom Button
     document.getElementById('rebloomBtn').addEventListener('click', () => {
       bloomStartTime = null;
-      playBloomChime();
-    });
-
-    // Sound Toggle
-    const soundBtn = document.getElementById('soundToggleBtn');
-    soundBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      soundBtn.innerHTML = soundEnabled ? 
-        `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> Sound ON` :
-        `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg> Sound OFF`;
-    });
-
-    // Custom Note Modal Control
-    const noteModal = document.getElementById('noteModal');
-    const noteInput = document.getElementById('noteInput');
-    const displayTitle = document.getElementById('displayTitle');
-
-    document.getElementById('openNoteBtn').addEventListener('click', () => {
-      noteModal.classList.add('active');
-      noteInput.value = displayTitle.textContent;
-    });
-
-    document.getElementById('closeNoteBtn').addEventListener('click', () => {
-      noteModal.classList.remove('active');
-    });
-
-    document.getElementById('saveNoteBtn').addEventListener('click', () => {
-      if (noteInput.value.trim() !== '') {
-        displayTitle.textContent = noteInput.value.trim();
-      }
-      noteModal.classList.remove('active');
     });
 
     // Start Loop
