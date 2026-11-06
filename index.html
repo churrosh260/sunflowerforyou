@@ -55,12 +55,17 @@
       align-items: center;
       padding: 2.5rem 1.5rem;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .ui-container.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
     
     .header {
       text-align: center;
-      animation: fadeInDown 1.4s ease-out forwards;
-      pointer-events: auto;
     }
 
     .main-title {
@@ -79,8 +84,6 @@
       flex-direction: column;
       align-items: center;
       gap: 0.8rem;
-      pointer-events: auto;
-      animation: fadeInUp 1.4s ease-out forwards;
     }
     
     .action-btn {
@@ -107,10 +110,6 @@
       border-color: rgba(255, 183, 3, 0.5);
       transform: translateY(-2px);
       box-shadow: 0 6px 25px rgba(255, 183, 3, 0.25);
-    }
-    
-    .action-btn:active {
-      transform: translateY(0);
     }
     
     .startup-overlay {
@@ -193,16 +192,6 @@
       white-space: nowrap;
       z-index: 1;
     }
-    
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
@@ -222,7 +211,7 @@
     </div>
   </div>
 
-  <div class="ui-container">
+  <div class="ui-container" id="mainUI">
     <div class="header">
       <h1 class="main-title">Flowers for you, locci :) 🌻</h1>
     </div>
@@ -247,6 +236,7 @@
     window.addEventListener('resize', resize);
     resize();
 
+    let isAccepted = false;
     let bloomProgress = 0;
     let bloomStartTime = null;
     const BLOOM_DURATION = 3800;
@@ -317,7 +307,6 @@
       ctx.globalAlpha = 1;
     }
 
-    // Realistic Stem and Curved Natural Leaves
     function drawStemAndLeaves(flower, growth) {
       const stemHeight = (height + 40) - flower.targetY;
       const currentHeight = stemHeight * growth;
@@ -342,7 +331,6 @@
         const leafProgress = Math.min(1, (growth - 0.4) / 0.5);
         const leafScale = easeInOutCubic(leafProgress) * flower.scale;
         
-        // Realistic Organic Left Leaf
         ctx.save();
         ctx.translate(flower.x - 6, startY - currentHeight * 0.42);
         ctx.rotate(-0.4);
@@ -355,7 +343,6 @@
         ctx.fill();
         ctx.restore();
 
-        // Realistic Organic Right Leaf
         ctx.save();
         ctx.translate(flower.x + 6, startY - currentHeight * 0.58);
         ctx.rotate(0.35);
@@ -372,7 +359,6 @@
       return { headX: flower.x, headY: endY };
     }
 
-    // Elegant Tapered Petals with Warm Glow
     function drawPetals(headX, headY, bloomProgress, scale) {
       if (bloomProgress <= 0) return;
 
@@ -425,7 +411,6 @@
       }
     }
 
-    // Detailed Fibonacci Seed Core
     function drawCenterDisk(headX, headY, bloomProgress, scale) {
       const diskRadius = 54 * scale * Math.min(1, bloomProgress * 1.2);
       if (diskRadius <= 0) return;
@@ -486,23 +471,25 @@
     }
 
     function animate(timestamp) {
-      if (!bloomStartTime) bloomStartTime = timestamp;
-      const elapsed = timestamp - bloomStartTime;
-      const progress = Math.min(1, elapsed / BLOOM_DURATION);
-      bloomProgress = easeInOutCubic(progress);
-
       ctx.clearRect(0, 0, width, height);
 
       updateAndDrawAmbient();
 
-      const flower = getSingleSunflower();
-      const stemGrowth = Math.min(1, bloomProgress * 1.35);
-      const headPos = drawStemAndLeaves(flower, stemGrowth);
+      if (isAccepted) {
+        if (!bloomStartTime) bloomStartTime = timestamp;
+        const elapsed = timestamp - bloomStartTime;
+        const progress = Math.min(1, elapsed / BLOOM_DURATION);
+        bloomProgress = easeInOutCubic(progress);
 
-      if (bloomProgress > 0.3) {
-        const petalProgress = (bloomProgress - 0.3) / 0.7;
-        drawPetals(headPos.headX, headPos.headY, petalProgress, flower.scale);
-        drawCenterDisk(headPos.headX, headPos.headY, petalProgress, flower.scale);
+        const flower = getSingleSunflower();
+        const stemGrowth = Math.min(1, bloomProgress * 1.35);
+        const headPos = drawStemAndLeaves(flower, stemGrowth);
+
+        if (bloomProgress > 0.3) {
+          const petalProgress = (bloomProgress - 0.3) / 0.7;
+          drawPetals(headPos.headX, headPos.headY, petalProgress, flower.scale);
+          drawCenterDisk(headPos.headX, headPos.headY, petalProgress, flower.scale);
+        }
       }
 
       updateAndDrawSparks();
@@ -513,16 +500,17 @@
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
     const startupOverlay = document.getElementById('startupOverlay');
+    const mainUI = document.getElementById('mainUI');
 
     const noTexts = [
       "No",
-      "wag, locci :(",
-      "ah, ayaw talaga?,
-      "yes mo na, please🙏",
-      "sige na, dyosa ng pom🙇",
-      "lungkot ako nyan",
-      "sige, iiyak ako",
-      
+      "Are you sure?",
+      "Think again!",
+      "Nice try!",
+      "Cannot click this!",
+      "Over here!",
+      "Still No?",
+      "Just click Yes! ❤️"
     ];
     let noClickCount = 0;
 
@@ -545,7 +533,13 @@
 
     yesBtn.addEventListener('click', () => {
       startupOverlay.style.opacity = '0';
-      setTimeout(() => startupOverlay.style.display = 'none', 600);
+      setTimeout(() => {
+        startupOverlay.style.display = 'none';
+        mainUI.classList.add('visible');
+      }, 600);
+      
+      // Trigger main animation state
+      isAccepted = true;
       bloomStartTime = null;
     });
 
