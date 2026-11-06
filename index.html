@@ -28,7 +28,6 @@
       color: #f8fafc;
     }
     
-    /* Background Canvas */
     #sunflowerCanvas {
       position: absolute;
       top: 0;
@@ -38,7 +37,6 @@
       z-index: 1;
     }
     
-    /* Ambient Glow Overlay */
     .vignette {
       position: absolute;
       inset: 0;
@@ -47,7 +45,6 @@
       z-index: 2;
     }
     
-    /* Main Content Container */
     .ui-container {
       position: absolute;
       inset: 0;
@@ -60,7 +57,6 @@
       pointer-events: none;
     }
     
-    /* Header Styling */
     .header {
       text-align: center;
       animation: fadeInDown 1.4s ease-out forwards;
@@ -78,7 +74,6 @@
       margin-bottom: 0.2rem;
     }
     
-    /* Footer & Controls */
     .footer {
       display: flex;
       flex-direction: column;
@@ -118,7 +113,6 @@
       transform: translateY(0);
     }
     
-    /* Startup Dialog Overlay */
     .startup-overlay {
       position: fixed;
       inset: 0;
@@ -158,7 +152,6 @@
       margin-bottom: 2rem;
     }
 
-    /* Side-by-Side Buttons Container */
     .startup-btns {
       display: flex;
       justify-content: center;
@@ -246,7 +239,6 @@
     const canvas = document.getElementById('sunflowerCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Canvas Resize Handler
     let width, height;
     function resize() {
       width = canvas.width = window.innerWidth;
@@ -255,27 +247,23 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // Animation States & Timings
     let bloomProgress = 0;
     let bloomStartTime = null;
-    const BLOOM_DURATION = 3800; // ms
+    const BLOOM_DURATION = 3800;
 
-    // Seed/Petal Golden Ratio Calculations
     const GOLDEN_ANGLE = 137.50776405003785 * (Math.PI / 180);
-    const SEED_COUNT = 520;
-    const PETAL_COUNT = 38;
+    const SEED_COUNT = 600;
+    const PETAL_COUNT = 34;
 
-    // Ambient Floating Dust Particles
-    const ambientParticles = Array.from({ length: 65 }, () => ({
+    const ambientParticles = Array.from({ length: 60 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       radius: Math.random() * 2 + 0.6,
-      alpha: Math.random() * 0.6 + 0.2,
+      alpha: Math.random() * 0.5 + 0.2,
       speedY: Math.random() * 0.4 + 0.15,
       speedX: (Math.random() - 0.5) * 0.3
     }));
 
-    // Sparkle Explosions Array
     let sparks = [];
     function spawnSparks(x, y) {
       for (let i = 0; i < 22; i++) {
@@ -292,21 +280,19 @@
       }
     }
 
-    // Tap & Click Event Listeners for Sparks
     window.addEventListener('pointerdown', (e) => {
       if (e.target.tagName !== 'BUTTON') {
         spawnSparks(e.clientX, e.clientY);
       }
     });
 
-    // Exact Sunflower Scale matching Screenshot
     function getSingleSunflower() {
       const isMobile = width < 600;
       return {
         x: width / 2,
         y: height + 40,
-        targetY: height * 0.64,
-        scale: isMobile ? 1.25 : 1.55
+        targetY: height * 0.60,
+        scale: isMobile ? 1.35 : 1.75
       };
     }
 
@@ -331,50 +317,54 @@
       ctx.globalAlpha = 1;
     }
 
+    // Realistic Stem and Curved Natural Leaves
     function drawStemAndLeaves(flower, growth) {
       const stemHeight = (height + 40) - flower.targetY;
       const currentHeight = stemHeight * growth;
       const startY = height + 40;
       const endY = startY - currentHeight;
 
-      // Stem Curve
       ctx.beginPath();
       ctx.moveTo(flower.x, startY);
-      const controlX = flower.x + Math.sin(growth * Math.PI) * 18;
+      const controlX = flower.x + Math.sin(growth * Math.PI) * 20;
       const controlY = startY - currentHeight * 0.5;
       ctx.quadraticCurveTo(controlX, controlY, flower.x, endY);
       ctx.strokeStyle = '#2d5a27';
-      ctx.lineWidth = 12 * flower.scale;
+      ctx.lineWidth = 14 * flower.scale;
       ctx.lineCap = 'round';
       ctx.stroke();
 
-      // Stem Inner Highlight
       ctx.strokeStyle = '#437a3c';
       ctx.lineWidth = 4 * flower.scale;
       ctx.stroke();
 
-      // Leaves Growth
-      if (growth > 0.35) {
-        const leafProgress = Math.min(1, (growth - 0.35) / 0.5);
+      if (growth > 0.4) {
+        const leafProgress = Math.min(1, (growth - 0.4) / 0.5);
         const leafScale = easeInOutCubic(leafProgress) * flower.scale;
         
-        // Left Leaf
+        // Realistic Organic Left Leaf
         ctx.save();
-        ctx.translate(flower.x - 3, startY - currentHeight * 0.45);
-        ctx.rotate(-0.55);
+        ctx.translate(flower.x - 6, startY - currentHeight * 0.42);
+        ctx.rotate(-0.4);
+        ctx.scale(leafScale, leafScale);
         ctx.beginPath();
-        ctx.ellipse(0, 0, 40 * leafScale, 16 * leafScale, 0.4, 0, Math.PI * 2);
-        ctx.fillStyle = '#2d5a27';
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-35, -15, -60, -5, -75, 20);
+        ctx.bezierCurveTo(-50, 40, -20, 30, 0, 0);
+        ctx.fillStyle = '#264e21';
         ctx.fill();
         ctx.restore();
 
-        // Right Leaf
+        // Realistic Organic Right Leaf
         ctx.save();
-        ctx.translate(flower.x + 3, startY - currentHeight * 0.6);
-        ctx.rotate(0.48);
+        ctx.translate(flower.x + 6, startY - currentHeight * 0.58);
+        ctx.rotate(0.35);
+        ctx.scale(leafScale, leafScale);
         ctx.beginPath();
-        ctx.ellipse(0, 0, 44 * leafScale, 18 * leafScale, -0.4, 0, Math.PI * 2);
-        ctx.fillStyle = '#34662d';
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(35, -15, 60, -5, 75, 20);
+        ctx.bezierCurveTo(50, 40, 20, 30, 0, 0);
+        ctx.fillStyle = '#2e5b28';
         ctx.fill();
         ctx.restore();
       }
@@ -382,25 +372,24 @@
       return { headX: flower.x, headY: endY };
     }
 
+    // Elegant Tapered Petals with Warm Glow
     function drawPetals(headX, headY, bloomProgress, scale) {
       if (bloomProgress <= 0) return;
 
-      const petalLength = 88 * scale * bloomProgress;
-      const petalWidth = 24 * scale * bloomProgress;
+      const petalLength = 110 * scale * bloomProgress;
+      const petalWidth = 22 * scale * bloomProgress;
       const time = Date.now() * 0.0015;
 
-      // Soft Outer Sunflower Glow
-      const glowGrad = ctx.createRadialGradient(headX, headY, 10, headX, headY, petalLength * 1.25);
-      glowGrad.addColorStop(0, 'rgba(255, 183, 3, 0.35)');
+      const glowGrad = ctx.createRadialGradient(headX, headY, 10, headX, headY, petalLength * 1.3);
+      glowGrad.addColorStop(0, 'rgba(255, 183, 3, 0.4)');
       glowGrad.addColorStop(1, 'rgba(255, 183, 3, 0)');
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
-      ctx.arc(headX, headY, petalLength * 1.25, 0, Math.PI * 2);
+      ctx.arc(headX, headY, petalLength * 1.3, 0, Math.PI * 2);
       ctx.fill();
 
-      // Double Layer Petal Ring matching Screenshot
       for (let layer = 0; layer < 2; layer++) {
-        const layerScale = layer === 0 ? 1 : 0.82;
+        const layerScale = layer === 0 ? 1 : 0.84;
         const count = layer === 0 ? PETAL_COUNT : PETAL_COUNT - 4;
         const offsetAngle = layer * (Math.PI / PETAL_COUNT);
 
@@ -414,19 +403,19 @@
 
           ctx.beginPath();
           ctx.moveTo(0, 0);
-          ctx.quadraticCurveTo(-petalWidth * 0.5 * layerScale, petalLength * 0.5 * layerScale, 0, petalLength * layerScale);
-          ctx.quadraticCurveTo(petalWidth * 0.5 * layerScale, petalLength * 0.5 * layerScale, 0, 0);
+          ctx.bezierCurveTo(-petalWidth * 0.6 * layerScale, petalLength * 0.45 * layerScale, -petalWidth * 0.3 * layerScale, petalLength * 0.85 * layerScale, 0, petalLength * layerScale);
+          ctx.bezierCurveTo(petalWidth * 0.3 * layerScale, petalLength * 0.85 * layerScale, petalWidth * 0.6 * layerScale, petalLength * 0.45 * layerScale, 0, 0);
 
           const grad = ctx.createLinearGradient(0, 0, 0, petalLength * layerScale);
           if (layer === 0) {
-            grad.addColorStop(0, '#e65c00');
-            grad.addColorStop(0.35, '#ffb703');
-            grad.addColorStop(0.85, '#ffd166');
-            grad.addColorStop(1, '#fff3b0');
+            grad.addColorStop(0, '#d94e00');
+            grad.addColorStop(0.25, '#ff9e00');
+            grad.addColorStop(0.75, '#ffc300');
+            grad.addColorStop(1, '#ffea00');
           } else {
-            grad.addColorStop(0, '#cc5200');
-            grad.addColorStop(0.4, '#ffa200');
-            grad.addColorStop(1, '#ffe17d');
+            grad.addColorStop(0, '#b33c00');
+            grad.addColorStop(0.3, '#ff8800');
+            grad.addColorStop(1, '#ffd000');
           }
 
           ctx.fillStyle = grad;
@@ -436,21 +425,20 @@
       }
     }
 
+    // Detailed Fibonacci Seed Core
     function drawCenterDisk(headX, headY, bloomProgress, scale) {
-      const diskRadius = 45 * scale * Math.min(1, bloomProgress * 1.2);
+      const diskRadius = 54 * scale * Math.min(1, bloomProgress * 1.2);
       if (diskRadius <= 0) return;
 
-      // Dark Mahogany Core Base
       const baseGrad = ctx.createRadialGradient(headX, headY, 0, headX, headY, diskRadius);
-      baseGrad.addColorStop(0, '#1a0a03');
-      baseGrad.addColorStop(0.75, '#3d1e0b');
-      baseGrad.addColorStop(1, '#5c2e0b');
+      baseGrad.addColorStop(0, '#120501');
+      baseGrad.addColorStop(0.7, '#2b1205');
+      baseGrad.addColorStop(1, '#4a2308');
       ctx.fillStyle = baseGrad;
       ctx.beginPath();
       ctx.arc(headX, headY, diskRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Golden Spiral Seed Distribution
       const visibleSeeds = Math.floor(SEED_COUNT * bloomProgress);
       for (let i = 0; i < visibleSeeds; i++) {
         const r = Math.sqrt(i / SEED_COUNT) * diskRadius * 0.95;
@@ -458,18 +446,18 @@
 
         const x = headX + r * Math.cos(theta);
         const y = headY + r * Math.sin(theta);
-        const seedRadius = (1.3 + (r / diskRadius) * 1.4) * scale;
+        const seedRadius = (1.2 + (r / diskRadius) * 1.5) * scale;
 
         ctx.beginPath();
         ctx.arc(x, y, seedRadius, 0, Math.PI * 2);
 
         const ratio = r / diskRadius;
-        if (ratio < 0.35) {
-          ctx.fillStyle = '#2b1408';
-        } else if (ratio < 0.75) {
-          ctx.fillStyle = '#6b3e11';
+        if (ratio < 0.3) {
+          ctx.fillStyle = '#1c0a02';
+        } else if (ratio < 0.7) {
+          ctx.fillStyle = '#542d0c';
         } else {
-          ctx.fillStyle = '#b8860b';
+          ctx.fillStyle = '#9e6b12';
         }
         ctx.fill();
       }
@@ -497,7 +485,6 @@
       ctx.globalAlpha = 1;
     }
 
-    // Main Animation Frame Loop
     function animate(timestamp) {
       if (!bloomStartTime) bloomStartTime = timestamp;
       const elapsed = timestamp - bloomStartTime;
@@ -506,7 +493,6 @@
 
       ctx.clearRect(0, 0, width, height);
 
-      // Render Layers
       updateAndDrawAmbient();
 
       const flower = getSingleSunflower();
@@ -524,26 +510,24 @@
       requestAnimationFrame(animate);
     }
 
-    // Interactive Startup Overlay & Dodging "No" Button
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
     const startupOverlay = document.getElementById('startupOverlay');
 
     const noTexts = [
       "No",
-      "Are you sure?",
-      "Think again!",
-      "Nice try!",
-      "Cannot click this!",
-      "Over here!",
-      "Still No?",
-      "Just click Yes! ❤️"
+      "wag, locci :(",
+      "ah, ayaw talaga?,
+      "yes mo na, please🙏",
+      "sige na, dyosa ng pom🙇",
+      "lungkot ako nyan",
+      "sige, iiyak ako",
+      
     ];
     let noClickCount = 0;
 
     function moveNoBtn() {
       const cardRect = startupOverlay.querySelector('.startup-card').getBoundingClientRect();
-      
       const maxX = (cardRect.width / 2) - 50;
       const maxY = 70;
 
@@ -565,12 +549,10 @@
       bloomStartTime = null;
     });
 
-    // Rebloom Button
     document.getElementById('rebloomBtn').addEventListener('click', () => {
       bloomStartTime = null;
     });
 
-    // Start Loop
     window.onload = () => {
       requestAnimationFrame(animate);
     };
